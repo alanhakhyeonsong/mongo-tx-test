@@ -12,7 +12,7 @@ MongoDB 트랜잭션 기능을 검증하기 위한 Kotlin + Spring Boot 샘플�
    - `docker-compose.yml`은 단일 노드 Replica Set(`rs0`)을 구동합니다.
    - **최초 1회** 컨테이너 내에서 Replica Set을 초기화해야 합니다.
      ```bash
-     docker compose exec mongodb mongosh --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"mongodb:27017"}]})'
+     docker compose exec mongodb mongosh --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"localhost:27017"}]})'
      ```
    - 애플리케이션은 `mongodb://localhost:27017/mongo-tx-test?replicaSet=rs0` 로 연결합니다.
 

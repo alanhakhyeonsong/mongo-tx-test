@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: mongo-tx-test
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mongo-tx-test?replicaSet=rs0
+      auto-index-creation: true
