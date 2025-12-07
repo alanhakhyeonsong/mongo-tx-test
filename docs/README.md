@@ -22,6 +22,9 @@
 6. [mongodb-vs-rdbms.md](./mongodb-vs-rdbms.md)
    - MongoDB와 RDBMS의 구조/철학 비교, Kotlin + Spring Data MongoDB 운영 시 주의점, 흔한 오해, 추가 학습 항목을 종합한 가이드입니다.
 
+7. [test-data-structures.md](./test-data-structures.md)
+   - 테스트/부하 시나리오에서 사용하는 MongoDB 컬렉션(`accounts`, `inventories`, `orders`, `point_ledgers`) 스키마와 시드 데이터 구성을 정리했습니다.
+
 ## 추가 노트
 
 - `scripts/seed/mongo-seed.js` 관련 설명은 README와 `load-test.md`에 포함되어 있으므로, 데이터 세팅 전에 해당 문서를 참고하세요.
