@@ -1,0 +1,48 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 60
+      arrivalRate: 2
+      name: warmup place orders
+    - duration: 90
+      arrivalRate: 5
+      rampTo: 15
+      name: steady order creation
+    - duration: 60
+      arrivalRate: 3
+      name: bulk insert burst
+    - duration: 60
+      arrivalRate: 2
+      rampTo: 8
+      name: account transfer stress
+  defaults:
+    headers:
+      Content-Type: application/json
+  processor: "./processor.js"
+
+scenarios:
+  - name: place-order
+    weight: 6
+    flow:
+      - function: setOrderPayload
+      - post:
+          url: "/api/v1/orders"
+          json: "{{ orderPayload }}"
+          capture:
+            - json: "$.orderId"
+              as: orderId
+  - name: bulk-insert
+    weight: 2
+    flow:
+      - post:
+          url: "/api/v1/orders/bulk"
+          json:
+            batchSize: 500
+            chunkSize: 100
+  - name: point-transfer
+    weight: 4
+    flow:
+      - function: setTransferPayload
+      - post:
+          url: "/api/v1/accounts/transfer"
+          json: "{{ transferPayload }}"
