@@ -4,15 +4,25 @@
 
 | Test Class | 시나리오 | 설명 |
 | --- | --- | --- |
-| `PlaceOrderUseCaseTest` | "충분한 재고" | 재고가 충분할 때 재고 저장 + 주문 저장이 1회씩 호출되는지 검증 |
-| `PlaceOrderUseCaseTest` | "재고 부족" | `InsufficientStockException` 발생 여부 확인 |
-| `TransferPointUseCaseTest` | "충분한 포인트" | 출금/입금이 각각 저장되고 원장이 기록되는지 검증 |
-| `TransferPointUseCaseTest` | "포인트 부족" | `InsufficientPointException` 발생 여부 확인 |
+| `OrderTest` | 빈 목록, 음수 수량 | 주문 생성 규칙 위반 시 예외 발생 여부 검증 |
+| `InventoryTest` | 잔여 수량/부족 수량 | `decrease` 동작과 예외 처리 검증 |
+| `AccountTest` | 입/출금, 음수 포인트 | 포인트 변동과 예외 발생 여부 검증 |
+| `PlaceOrderUseCaseTest` | 충분/부족 재고 | 포트 호출 및 예외 발생 검증 |
+| `TransferPointUseCaseTest` | 충분/부족 포인트 | 계좌 저장/원장 기록 여부 검증 |
+| `BulkOrderInsertUseCaseTest` | 청크 배치 처리 | `batchSize/chunkSize` 조합에 따른 저장 호출 횟수 확인 |
 
-모든 테스트는 `MockK`를 사용하여 포트를 목킹하고, `TestMongoTxPort`로 트랜잭션 경계를 간단히 대체했습니다.
+`PlaceOrderUseCaseTest`, `TransferPointUseCaseTest`, `BulkOrderInsertUseCaseTest` 는 `MockK`와 `TestMongoTxPort`로 포트를 목킹해 트랜잭션 경계를 대체합니다.
+
+## 통합 테스트
+
+| Test Class | 시나리오 | 설명 |
+| --- | --- | --- |
+| `MongoTransactionIntegrationTest` | 성공/부분 실패 주문 | Testcontainers MongoDB Replica Set 상에서 트랜잭션 커밋/롤백 동작 검증 |
+
+- Docker 가 필요하며, 실행 환경에 Docker가 없으면 자동으로 비활성화됩니다.
+- `InventoryMongoRepository`, `OrderMongoRepository`, `PlaceOrderInPort`를 실제 빈으로 주입해 엔드투엔드 흐름을 검증합니다.
 
 ## 향후 확장 아이디어
 
-- **Integration Test**: `@DataMongoTest` + `MongoTemplate` 으로 실제 세션 기반 트랜잭션을 검증.
 - **Load Test**: `BulkOrderInsertUseCase`를 이용해 `kotest-property` 기반 property-based 테스트를 도입해 다양한 배치/청크값을 생성.
 - **API Contract Test**: `RestAssured`나 `Spring MockMvc`로 REST 스펙을 문서화(`spring-restdocs`)하여 README와 연동.

@@ -8,12 +8,10 @@ MongoDB 트랜잭션 기능을 검증하기 위한 Kotlin + Spring Boot 샘플�
 1. **MongoDB Replica Set**
    ```bash
    docker compose up -d
+   docker exec -it mongo-rs-test mongosh --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"localhost:27017"}]})'
    ```
    - `docker-compose.yml`은 단일 노드 Replica Set(`rs0`)을 구동합니다.
-   - **최초 1회** 컨테이너 내에서 Replica Set을 초기화해야 합니다.
-     ```bash
-     docker compose exec mongodb mongosh --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"localhost:27017"}]})'
-     ```
+   - `mongo-rs-test` 컨테이너 안에서 최초 1회만 `rs.initiate`를 실행하면 됩니다.
    - 애플리케이션은 `mongodb://localhost:27017/mongo-tx-test?replicaSet=rs0` 로 연결합니다.
 
 2. **애플리케이션 구동**
@@ -22,7 +20,12 @@ MongoDB 트랜잭션 기능을 검증하기 위한 Kotlin + Spring Boot 샘플�
    ```
 
 3. **샘플 데이터**
-   - `inventories`, `accounts` 컬렉션에 초기 데이터를 넣어야 합니다. 간단히 `mongosh`에서 `insertOne` 하거나 `data` 스크립트를 추가하세요.
+   - `scripts/seed/mongo-seed.js` 로 더미 데이터를 한 번에 넣을 수 있습니다.
+     ```bash
+     docker cp scripts/seed/mongo-seed.js mongo-rs-test:/tmp/mongo-seed.js
+     docker exec -it mongo-rs-test mongosh --eval 'load("/tmp/mongo-seed.js")'
+     ```
+   - 스크립트는 `accounts`(`A-1`~`A-5`), `inventories`(`SKU-0`~`SKU-9`) 를 초기화합니다.
 
 ## 핵심 시나리오
 

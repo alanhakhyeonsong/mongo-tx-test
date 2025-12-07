@@ -17,8 +17,12 @@
    ```
 
 3. **기본 데이터 준비**
-   - `inventories` 컬렉션: SKU-0 ~ SKU-9 등 테스트에 필요한 제품을 충분한 수량으로 삽입.
-   - `accounts` 컬렉션: `A-1` ~ `A-5`와 같이 포인트 이체에 사용할 계좌/잔액을 저장.
+   - `scripts/seed/mongo-seed.js` 실행으로 `accounts`/`inventories` 컬렉션을 초기화할 수 있습니다.
+     ```bash
+     docker cp scripts/seed/mongo-seed.js mongo-rs-test:/tmp/mongo-seed.js
+     docker exec -it mongo-rs-test mongosh --eval 'load("/tmp/mongo-seed.js")'
+     ```
+   - 스크립트는 `A-1`~`A-5` 계좌와 `SKU-0`~`SKU-9` 재고를 충분한 수량으로 생성합니다.
 
 4. **Artillery 설치**
    - 전역 설치 권장:
@@ -44,6 +48,9 @@ artillery run loadtest/artillery/order-and-account.yml
   - `place-order`: SKU/수량을 랜덤 생성해 `/api/v1/orders` 호출 (가중치 6)
   - `bulk-insert`: `batchSize=500`, `chunkSize=100` 으로 `/api/v1/orders/bulk` 호출 (가중치 2)
   - `point-transfer`: 계좌 ID/금액을 랜덤 생성해 `/api/v1/accounts/transfer` 호출 (가중치 4)
+- **Processor (`processor.js`)**
+  - Artillery 2에서 `functions` 블록 대신 외부 JS를 사용합니다.
+  - SKU/계좌/금액 랜덤 로직은 `loadtest/artillery/processor.js` 에 정의되어 있으며, 필요 시 동일 파일을 수정해 다양한 입력을 생성할 수 있습니다.
 
 ### 결과 확인
 
