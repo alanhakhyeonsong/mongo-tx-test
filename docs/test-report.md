@@ -15,8 +15,8 @@
 - **결과**: 성공(HTTP 200만 응답) – 테스트가 타임아웃으로 중단되었지만 실패(vusers.failed) 없이 종료됨
 - **요약 지표(발췌)**:
   - Warmup 구간(60s): 초당 2건, `http.codes.200` = 12, 평균 응답 37.6ms (p95 19.9ms)
-  - Steady 구간: 초당 5→15건, `http.codes.200` = 20~30, 평균 응답 45~68ms, p95 242~308ms
-  - Bulk burst / Transfer stress: 초당 3~8건, `vusers.failed = 0`, `http.codes.200` = 30, 평균 응답 45~49ms, p95 약 262ms
+  - Steady 구간: 초당 5 → 15건, `http.codes.200` = 20 ~ 30, 평균 응답 45 ~ 68ms, p95 242 ~ 308ms
+  - Bulk burst / Transfer stress: 초당 3 ~ 8건, `vusers.failed = 0`, `http.codes.200` = 30, 평균 응답 45 ~ 49ms, p95 약 262ms
   - 전체 실행 동안 `errors.*` 없음, `vusers.failed = 0`
 - **비고**:
   - 스크립트가 총 4개 phase(270초)를 모두 마치기 전에 타임아웃으로 중단되었으므로 더 긴 관측이 필요하면 `artillery run ... --output report.json` 후 `artillery report` 로 HTML 리포트를 생성하는 것을 권장합니다.
