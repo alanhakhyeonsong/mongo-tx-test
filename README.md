@@ -25,7 +25,7 @@ MongoDB 트랜잭션 기능을 검증하기 위한 Kotlin + Spring Boot 샘플�
      docker cp scripts/seed/mongo-seed.js mongo-rs-test:/tmp/mongo-seed.js
      docker exec -it mongo-rs-test mongosh --eval 'load("/tmp/mongo-seed.js")'
      ```
-   - 스크립트는 `accounts`(`A-1`~`A-5`), `inventories`(`SKU-0`~`SKU-9`) 를 초기화합니다.
+   - 스크립트는 `accounts` (`A-1` ~ `A-5`), `inventories` (`SKU-0` ~ `SKU-9`) 를 초기화합니다.
 
 ## 핵심 시나리오
 
